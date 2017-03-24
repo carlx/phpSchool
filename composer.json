@@ -1,0 +1,10 @@
+{
+    "name": "kwawrzecki/php-school",
+    "authors": [
+        {
+            "name": "Karol Wawrzecki",
+            "email": "kwawrzecki@gmail.com"
+        }
+    ],
+    "require": {}
+}
