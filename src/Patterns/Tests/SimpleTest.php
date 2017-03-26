@@ -1,5 +1,6 @@
 <?php
 use PHPUnit\Framework\TestCase;
+use Prophecy\Prophecy\ObjectProphecy;
 use Patterns\CommandPattern\Gun;
 use Patterns\CommandPattern\Shooter;
 use Patterns\CommandPattern\ShootCommand;
@@ -13,6 +14,7 @@ use Patterns\AdapterPattern\GoogleWhetherAdapter;
 use Patterns\AdapterPattern\WeatherClient;
 use Patterns\AdapterPattern\AmazonWhetherService;
 use Patterns\AdapterPattern\AmazonWhetherAdapter;
+use Patterns\SingletonPattern\Singleton;
 
 final class SimpleTest extends TestCase {
 	
@@ -55,6 +57,25 @@ final class SimpleTest extends TestCase {
         $client = new WeatherClient($adapter);
 
         $this->assertEquals('amazon', $client->forecast());
+    }
+
+    public function testWithProphecy()
+    {
+        $expected = '123';
+        $amazonService = $this->prophesize(AmazonWhetherService::class);
+        $amazonService->getAmazonWhether()->willReturn($expected);
+        $adapter = new AmazonWhetherAdapter($amazonService->reveal());
+        $client = new WeatherClient($adapter);
+        $this->assertEquals($expected, $client->forecast());
+
+    }
+
+    public function testSingleton()
+    {
+        $instance1 = Singleton::getInstance();
+        $instance2 = Singleton::getInstance();
+        
+        $this->assertEquals($instance1, $instance2);
     }
 
 }
